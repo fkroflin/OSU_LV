@@ -1,33 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = plt.imread('road.jpg')
-orig = img[:, :, 0].copy()
-plt.imshow(orig, cmap = "gray")
+img = plt.imread("road.jpg")
+img = img[:,:,0].copy()
+
+plt.imshow(img, cmap = "gray")
 plt.figure()
 
 #a
-aCopy = orig.copy()
-for i in range(int(str(aCopy.shape).split(',')[0].lstrip('('))):
-    for j in range(int(str(aCopy.shape).split(',')[1].rstrip(')'))):
-        aCopy[i, j] += 100
-        if aCopy[i, j] <= 100:
-            aCopy[i, j] = 255
-
-plt.imshow(aCopy, cmap = "gray")
+plt.imshow(img, alpha=0.5, cmap="gray")
 plt.figure()
 
 #b
-bCopy = np.hsplit(orig.copy(), 4)[1]
-plt.imshow(bCopy, cmap = "gray")
+b = np.hsplit(img.copy(), 4)[1]
+plt.imshow(b, cmap = "gray")
 plt.figure()
 
 #c
-cCopy = np.rot90(np.rot90(np.rot90(orig.copy())))
-plt.imshow(cCopy, cmap = "gray")
+c = np.rot90(np.rot90(np.rot90(img.copy())))
+plt.imshow(c, cmap = "gray")
 plt.figure()
 
 #d
-dCopy = np.flip(orig.copy(), axis = 1)
-plt.imshow(dCopy, cmap = "gray")
+d = np.flip(img.copy(), axis = 1)
+plt.imshow(d, cmap = "gray")
 plt.show()
