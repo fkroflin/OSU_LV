@@ -17,10 +17,7 @@ print('Train: X=%s, y=%s' % (x_train.shape, y_train.shape))
 print('Test: X=%s, y=%s' % (x_test.shape, y_test.shape))
 
 # TODO: prikazi nekoliko slika iz train skupa
-for i in range(5):
-    plt.figure()
-    plt.imshow(x_train[i])
-plt.show
+
 
 # skaliranje slike na raspon [0,1]
 x_train_s = x_train.astype("float32") / 255
@@ -56,14 +53,18 @@ model.compile (loss = "categorical_crossentropy", optimizer = "adam", metrics = 
 # TODO: provedi ucenje mreze
 x_train_2 = x_train.reshape(60000,784)
 x_test_2 = x_test.reshape(10000,784)
+
 history = model.fit(x_train_2 , y_train_s, batch_size = 32 , epochs = 2 , validation_split = 0.1)
 
 predictions = model.predict(x_test_2)
 score = model.evaluate(x_test_2, y_test_s, verbose=0)
 
 # TODO: Prikazi test accuracy i matricu zabune
-
-
+cm = confusion_matrix(y_test, predictions.argmax(axis=1), labels = np.arange(10))
+disp = ConfusionMatrixDisplay(confusion_matrix = cm, display_labels = np.arange(10))
+disp.plot()
+plt.show()
 
 # TODO: spremi model
-
+model.save("model/model.keras")
+ 

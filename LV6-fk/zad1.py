@@ -73,17 +73,6 @@ print("Logisticka regresija: ")
 print("Tocnost train: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 print("Tocnost test: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p))))
 
-# inicijalizacija i ucenje KNN modela
-KNN_model = KNeighborsClassifier(n_neighbors=5)
-KNN_model.fit(X_train_n, y_train)
-
-y_test_p_KNN = KNN_model.predict(X_test_n)
-y_train_p_KNN = KNN_model.predict(X_train_n)
-
-print("KNN model: ")
-print("Tocnost train: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_KNN))))
-print("Tocnost test: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p_KNN))))
-
 # granica odluke pomocu logisticke regresije
 plot_decision_regions(X_train_n, y_train, classifier=LogReg_model)
 plt.xlabel('x_1')
@@ -93,21 +82,57 @@ plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 plt.tight_layout()
 plt.show()
 
-#K=1 i K=100
-KNN_1 = KNeighborsClassifier(n_neighbors=1)
+#1.1
+KNN = KNeighborsClassifier(n_neighbors = 5)
+KNN.fit(X_train_n, y_train)
+
+y_train_p = KNN.predict(X_train_n)
+y_test_p = KNN.predict(X_test_n)
+
+print("KNN model: ")
+print("Tocnost train: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
+print("Tocnost test: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p))))
+
+#1.2
+KNN_1 = KNeighborsClassifier(n_neighbors = 1)
 KNN_1.fit(X_train_n, y_train)
 plot_decision_regions(X_train_n, y_train, KNN_1)
-plt.title("K=1")
+plt.title('K=1')
 
-KNN_100 = KNeighborsClassifier(n_neighbors=100)
+KNN_100 = KNeighborsClassifier(n_neighbors = 100)
 KNN_100.fit(X_train_n, y_train)
 plot_decision_regions(X_train_n, y_train, KNN_100)
-plt.title("K=100")
-plt.show()
+plt.title('K=100')
 
-#zad 1.2
-param_grid = {"n_neighbors": [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-knn_gscv = GridSearchCV(estimator = KNeighborsClassifier().fit(X_train_n, y_train), param_grid = param_grid, cv = 5, scoring = "accuracy")
+#2
+param_grid = {'n_neighbors': [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+knn_gscv = GridSearchCV(estimator = KNeighborsClassifier().fit(X_train_n, y_train), param_grid = param_grid, cv = 5, scoring = 'accuracy')
 knn_gscv.fit(X_train_n, y_train)
-print (knn_gscv.best_params_)
-print (knn_gscv.best_score_ )
+print(knn_gscv.best_params_)
+print(knn_gscv.best_score_)
+
+#3
+rbf_svm = svm.SVC(kernel = 'rbf', C = 1, gamma = 1, random_state = 42)
+rbf_svm.fit(X_train_n, y_train)
+plot_decision_regions(X_train_n, y_train, rbf_svm)
+
+for i in range(4):
+    for j in range (4):
+        for k in range(4):
+            C = [0.01, 0.1, 1, 10]
+            gamma = [0.01, 0.1, 1, 10]
+            kernel = ['linear', 'poly', 'rbf', 'sigmoid']
+            test = svm.SVC(kernel = kernel[i], C = C[j], gamma = gamma[k], random_state = 42)
+            test.fit(X_train_n, y_train)
+            plot_decision_regions(X_train_n, y_train, test)
+            plt.title("C: " + str(C[j]) + ", gamma: " + str(gamma[k]) + ", kernel: " + kernel[i])
+        plt.show()
+
+#4
+param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
+              'gamma': [0.001, 0.01, 0.1, 1, 10, 100]}
+svm_gscv = GridSearchCV(estimator = svm.SVC().fit(X_train_n, y_train), param_grid = param_grid, cv = 5, scoring = 'accuracy')
+svm_gscv.fit(X_train_n, y_train)
+print(svm_gscv.best_params_)
+print(svm_gscv.best_score_)
+plt.show()
