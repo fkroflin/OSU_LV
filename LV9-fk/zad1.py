@@ -64,3 +64,38 @@ model.fit(X_train_n,
 score = model.evaluate(X_test_n, y_test, verbose=0)
 print(f'Tocnost na testnom skupu podataka: {100.0*score[1]:.2f}')
 
+# 1. zadatak
+# 1.1. CNN mreza sastoji se od konvolucijskih slojeva, slojeva sažimanja, 
+# flatten sloja i potpuno povezanih slojeva
+# 1.3. Sto se dogodilo tijekom ucenja mreze? Na pocetku se povecavaju i 
+# tocnost na skupu podataka za ucenje i na validacijskom skupu, a funkcije
+# gubitka se smanjuju
+# na 7. epohi tocnost na validacijskom skupu smanjuje se u odnosu na 
+# prethodnu epohu , a funkcija gubitka na validacijskom skupu se povecava
+# 1.3. Tocnost na skupu podataka za testiranje: 73.32
+
+# 2.zadatak
+# Nakon dodavanja droput sloja između dva potpuno povezana sloja, tocnost na
+# skupu podataka za testiranje se povecala na 74.75 sto znaci da su se
+# performanse poboljsale dodavanjem dropout sloja. Dropout sloj smanjuje
+# ovisnost modela o pojedinacnim znacajkama cime se smanjuje mogucnost
+# overfittinga
+
+# 3. zadatak
+# Dodavanjem ranog zaustavljanja s patience=5 zaustavlja proces ucenja na 11.
+# epohi zato sto se funkcja gubitka na validacijskom skupu pocinje povecavati
+# na 7. epohi,
+# odnosno 5 uzastopnih epoha nije se smanjila prosjecna vrijednost funkcije
+# gubitka na validacijskom skupu
+
+# 4. zadatak
+# 4.1. Ukoliko se koristi jako mala velicina serije proces ucenja traje dulje,
+# kada je batch size 64, potrebno je 17s da se jedna epoha izvrsi, a kada je 
+# batch size 1 potrebno je 397 sekundi
+# 4.2. Ukoliko se koristi jako mali learning rate, tocnost na testnom skupu
+# podataka se smanjuje, za learning_rate=0.01, dolazi do ranog zaustavljanja
+# na 13. epohi i tocnost na testnom skupu podataka je 43.06
+# 4.3. Ukoliko se odredjeni slojevi izbace iz mreze, tocnost na testnom skupu
+# podataka se smanjuje
+# 4.4. Ukoliko se skup podataka za ucenje smanji za 50%, tocnost na testnom
+# skupu podataka se smanjuje
